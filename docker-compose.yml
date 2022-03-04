@@ -1,0 +1,27 @@
+version: "3"
+   
+services:
+  db:
+    container_name: db_maesconha
+    image: postgres
+    volumes:
+      - ./data/db:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_NAME=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+  django:
+    container_name: django_maesconha
+    build: ./django_app
+    restart: always
+    command: python manage.py runserver 0.0.0.0:8000
+    volumes:
+      - ./django_app:/django_app
+    ports:
+      - "8000:8000"
+    environment:
+      - POSTGRES_NAME=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    depends_on:
+      - db
